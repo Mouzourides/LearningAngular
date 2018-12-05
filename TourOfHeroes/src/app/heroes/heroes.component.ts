@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Hero} from '../Hero';
+import {HeroService} from '../hero.service';
 
 @Component({
   selector: 'app-heroes',
@@ -7,28 +8,11 @@ import {Hero} from '../Hero';
   styleUrls: ['./heroes.component.scss']
 })
 export class HeroesComponent implements OnInit {
-  protected heroes: Hero[] = [
-    {
-      id: 0,
-      name: 'Thor'
-    },
-    {
-      id: 1,
-      name: 'Iron Man'
-    },
-    {
-      id: 2,
-      name: 'Hulk'
-    },
-    {
-      id: 3,
-      name: 'Captain America'
-    },
-  ];
-
+  protected heroes: Hero[];
   protected selectedHero: Hero;
 
-  constructor() {
+  constructor(private heroService: HeroService) {
+    this.getHeroes();
   }
 
   ngOnInit() {
@@ -38,4 +22,8 @@ export class HeroesComponent implements OnInit {
     this.selectedHero = hero;
   }
 
+  getHeroes(): void {
+    this.heroService.getHeroes()
+      .subscribe(heroes => this.heroes = heroes);
+  }
 }
