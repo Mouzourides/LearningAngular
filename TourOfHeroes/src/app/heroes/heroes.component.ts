@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {Heroes} from '../Heroes';
+import {Component, OnInit} from '@angular/core';
+import {Hero} from '../Hero';
 
 @Component({
   selector: 'app-heroes',
@@ -7,14 +7,35 @@ import {Heroes} from '../Heroes';
   styleUrls: ['./heroes.component.scss']
 })
 export class HeroesComponent implements OnInit {
-  protected hero: Heroes = {
-    id: 1,
-    name: 'Thor'
-  };
+  protected heroes: Hero[] = [
+    {
+      id: 0,
+      name: 'Thor'
+    },
+    {
+      id: 1,
+      name: 'Iron Man'
+    },
+    {
+      id: 2,
+      name: 'Hulk'
+    },
+    {
+      id: 3,
+      name: 'Captain America'
+    },
+  ];
 
-  constructor() { }
+  protected selectedHero: Hero;
+
+  constructor() {
+  }
 
   ngOnInit() {
+  }
+
+  onSelect(hero: Hero): void {
+    this.selectedHero = hero;
   }
 
 }
