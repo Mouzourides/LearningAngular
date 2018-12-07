@@ -3,7 +3,7 @@ import {Hero} from './Hero';
 import {Observable, of} from 'rxjs';
 import {MessageService} from '../messages/message.service';
 import {HttpClient} from '@angular/common/http';
-import {catchError} from 'rxjs/operators';
+import {catchError, tap} from 'rxjs/operators';
 import {defaultHeroes} from './default-heros';
 
 @Injectable({
@@ -19,18 +19,18 @@ export class HeroService {
   }
 
   getHeroes(): Observable<Hero[]> {
-    this.log('Fetched heroes from server');
     return this.http.get<Hero[]>(this.allHeroesUrl)
       .pipe(
-        catchError(this.handleError('getHeroes', defaultHeroes))
+        tap(() => this.log('Fetched all heroes')),
+        catchError(this.handleError<Hero[]>('getHeroes', defaultHeroes))
       );
   }
 
   getHero(id: number): Observable<Hero> {
-    this.log('Fetched a hero from server');
     return this.http.post<Hero>(this.oneHeroUrl + id, {})
       .pipe(
-        catchError(this.handleError('getHeroes', defaultHeroes[id]))
+        tap(() => this.log(`fetched hero id=${id}`)),
+        catchError(this.handleError<Hero>(`getHero id=${id}`, defaultHeroes[id]))
       );
   }
 
