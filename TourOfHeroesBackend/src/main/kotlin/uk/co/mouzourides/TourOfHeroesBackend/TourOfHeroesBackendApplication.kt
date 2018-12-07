@@ -26,41 +26,30 @@ class HeroesController {
             Hero(id = 5, name = "Black Widow")
     )
 
-    @PostMapping("/one")
-    @ResponseBody
+    @GetMapping("/all")
+    fun getAllHeroes(): Iterable<Hero> {
+        return heroList.sortedBy { it.id }
+    }
+
+    @PostMapping
     fun getHeroesById(@RequestParam id: Int): Hero {
         return heroList.first { it.id == id }
     }
 
-    @GetMapping("/all")
-    @ResponseBody
-    fun getAllHeroes(): Iterable<Hero> {
-        return heroList
+    @DeleteMapping
+    fun removeHeroById(@RequestParam id: Int) {
+        heroList.remove(heroList.first { it.id == id })
     }
 
     @PutMapping("/update")
-    @ResponseBody
     fun updateHero(@RequestBody hero: Hero) {
-        heroList.map {
-            it.copy(name =
-            if (it.id == hero.id)
-                hero.name
-            else
-                it.name
-            )
-        }
+        removeHeroById(hero.id)
+        addHero(hero)
     }
 
     @PostMapping("/add")
-    @ResponseBody
     fun addHero(@RequestBody hero: Hero): Hero {
         heroList += hero
         return heroList.first { it.id == hero.id }
-    }
-
-    @PutMapping("/remove")
-    @ResponseBody
-    fun removeHero(@RequestBody hero: Hero) {
-        heroList -= hero
     }
 }

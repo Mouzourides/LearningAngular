@@ -25,16 +25,20 @@ export class HeroesComponent implements OnInit {
   addHero(heroName: string) {
     heroName = heroName.trim();
     if (!heroName) { return; }
-    this.heroService.addHero({id: this.heroes.length, name: heroName} as Hero)
+
+    this.heroes.sort((a, b) => a.id + b.id);
+    const id: number = this.heroes[this.heroes.length - 1].id + 1;
+
+    this.heroService.addHero({id, name: heroName} as Hero)
       .subscribe(hero => {
         this.heroes.push(hero);
       });
   }
 
-  deleteHero(hero: Hero) {
-    this.heroService.deleteHero(hero)
+  deleteHero(id: number) {
+    this.heroService.deleteHero(id)
       .subscribe(() => {
-        this.heroes = this.heroes.filter((h) => h.id !== hero.id);
+        this.heroes = this.heroes.filter((h) => h.id !== id);
       });
   }
 }
