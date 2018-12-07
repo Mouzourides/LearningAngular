@@ -43,4 +43,11 @@ class HeroesController {
     fun updateHero(@RequestBody hero: Hero) {
         heroList[hero.id] = hero
     }
+
+    @PostMapping("/add")
+    @ResponseBody
+    fun addHero(@RequestBody hero: Hero): Hero {
+        heroList += hero
+        return heroList[hero.id]
+    }
 }
