@@ -13,11 +13,11 @@ fun main(args: Array<String>) {
 
 data class Hero(val id: Int, val name: String)
 
-@CrossOrigin(origins = ["http://localhost:4200"], maxAge = 3600)
+@CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
 @RequestMapping(path = ["/api/heroes"])
 class HeroesController {
-    val heroList = listOf(
+    val heroList = mutableListOf(
             Hero(id = 0, name = "Thor"),
             Hero(id = 1, name = "Iron Man"),
             Hero(id = 2, name = "Hulk"),
@@ -38,5 +38,9 @@ class HeroesController {
         return heroList
     }
 
-
+    @PutMapping("/update")
+    @ResponseBody
+    fun updateHero(@RequestBody hero: Hero) {
+        heroList[hero.id] = hero
+    }
 }

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Hero} from './Hero';
 import {Observable, of} from 'rxjs';
 import {MessageService} from '../messages/message.service';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators';
 import {defaultHeroes} from './default-heros';
 
@@ -12,6 +12,11 @@ import {defaultHeroes} from './default-heros';
 export class HeroService {
   private allHeroesUrl = 'http://localhost:8080/api/heroes/all';
   private oneHeroUrl = 'http://localhost:8080/api/heroes/one?id=';
+  private updateHeroUrl = 'http://localhost:8080/api/heroes/update';
+
+  private httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   constructor(
     private http: HttpClient,
@@ -31,6 +36,14 @@ export class HeroService {
       .pipe(
         tap(() => this.log(`fetched hero id=${id}`)),
         catchError(this.handleError<Hero>(`getHero id=${id}`, defaultHeroes[id]))
+      );
+  }
+
+  saveHero(updatedHero: Hero): Observable<any> {
+    return this.http.put(this.updateHeroUrl, updatedHero, this.httpOptions)
+      .pipe(
+        tap(() => this.log('Updated hero name')),
+        catchError(this.handleError('updateHero'))
       );
   }
 
