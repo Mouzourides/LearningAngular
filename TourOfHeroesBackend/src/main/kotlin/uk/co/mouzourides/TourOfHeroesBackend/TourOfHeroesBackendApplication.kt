@@ -28,26 +28,39 @@ class HeroesController {
 
     @PostMapping("/one")
     @ResponseBody
-    fun getHeroesById(@RequestParam id: Int): Hero{
-        return heroList[id]
+    fun getHeroesById(@RequestParam id: Int): Hero {
+        return heroList.first { it.id == id }
     }
 
     @GetMapping("/all")
     @ResponseBody
-    fun getAllHeroes(): Iterable<Hero>{
+    fun getAllHeroes(): Iterable<Hero> {
         return heroList
     }
 
     @PutMapping("/update")
     @ResponseBody
     fun updateHero(@RequestBody hero: Hero) {
-        heroList[hero.id] = hero
+        heroList.map {
+            it.copy(name =
+            if (it.id == hero.id)
+                hero.name
+            else
+                it.name
+            )
+        }
     }
 
     @PostMapping("/add")
     @ResponseBody
     fun addHero(@RequestBody hero: Hero): Hero {
         heroList += hero
-        return heroList[hero.id]
+        return heroList.first { it.id == hero.id }
+    }
+
+    @PutMapping("/remove")
+    @ResponseBody
+    fun removeHero(@RequestBody hero: Hero) {
+        heroList -= hero
     }
 }

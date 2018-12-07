@@ -14,6 +14,7 @@ export class HeroService {
   private oneHeroUrl = 'http://localhost:8080/api/heroes/one?id=';
   private updateHeroUrl = 'http://localhost:8080/api/heroes/update';
   private addHeroUrl = 'http://localhost:8080/api/heroes/add';
+  private removeHeroUrl = 'http://localhost:8080/api/heroes/remove';
 
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -53,6 +54,14 @@ export class HeroService {
       .pipe(
         tap(() => this.log(`Added hero: ${hero.name}`)),
         catchError(this.handleError<Hero>(`addHero: ${hero.name}`, hero))
+      );
+  }
+
+  deleteHero(hero: Hero): Observable {
+    return this.http.put(this.removeHeroUrl, hero, this.httpOptions)
+      .pipe(
+        tap(() => this.log(`Remove hero: ${hero.name}`)),
+        catchError(this.handleError<Hero>(`removeHero: ${hero.name}`, hero))
       );
   }
 
